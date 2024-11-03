@@ -3,27 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Identity;
+using System.Configuration;
 
 namespace FinalProject.Pages
 {
     public class IndexModel : PageModel
     {
+        private readonly string _connectionString;
 
         public List<EmailInfo> listEmails = new List<EmailInfo>();
 
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         public void OnGet()
         {
             try
             {
-                String connectionString = "Server=tcp:sprint1.database.windows.net,1433;Initial Catalog=sprint1;Persist Security Info=False;User ID=dbadmin;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
 

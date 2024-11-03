@@ -7,6 +7,13 @@ namespace FinalProject.Areas.EmailSystem.Pages
 {
     public class ComposeMailModel : PageModel
     {
+        private readonly string _connectionString;
+
+        public ComposeMailModel(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
+
         [BindProperty]
         public string? Subject { get; set; }
 
@@ -18,8 +25,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            String connectionString = "Server=tcp:sprint1.database.windows.net,1433;Initial Catalog=sprint1;Persist Security Info=False;User ID=dbadmin;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 String query = "INSERT INTO Emails (EmailSubject, EmailMessage, EmailDate, EmailIsRead, EmailSender, EmailReceiver) VALUES (@EmailSubject, @EmailMessage, @EmailDate, @EmailIsRead, @EmailSender, @EmailReceiver)";
