@@ -1,0 +1,25 @@
+﻿@page
+@model FinalProject.Areas.EmailSystem.Pages.ReadEmailModel
+@{
+    ViewData["Title"] = "Read Email";
+}
+
+<h1>Email Details</h1>
+
+@if (Model.emailInfo != null)
+{
+<div>
+    <h2>@Model.emailInfo.EmailSubject</h2>
+    <p>Sender: @Model.emailInfo.EmailSender</p>
+    <p>Receiver: @Model.emailInfo.EmailReceiver</p>
+    <p>Date sent: @Model.emailInfo.EmailDate</p>
+    <br/>
+    <p>@Model.emailInfo.EmailMessage</p>
+    <br />
+    <a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity.Name&Receiver=@Model.emailInfo.EmailSender&Subject=Re: @Model.emailInfo.EmailSubject">Reply</a>
+</div>
+}
+else
+{
+<p>Email not found.</p>
+}

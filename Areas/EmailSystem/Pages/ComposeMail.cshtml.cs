@@ -16,7 +16,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
         [BindProperty]
         public string? Receiver { get; set; }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             String connectionString = "Server=tcp:sprint1.database.windows.net,1433;Initial Catalog=sprint1;Persist Security Info=False;User ID=dbadmin;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -38,6 +38,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
                     await command.ExecuteNonQueryAsync();
                 }
             }
+            return RedirectToPage("/Index");
         }
     }
 }
