@@ -22,7 +22,7 @@ namespace FinalProject.Pages
         {
             try
             {
-                String connectionString = "Server=tcp:buem.database.windows.net,1433;Initial Catalog=buem;Persist Security Info=False;User ID=[USERNAME];Password=[PASSWORD];MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                String connectionString = "Server=tcp:sprint1.database.windows.net,1433;Initial Catalog=sprint1;Persist Security Info=False;User ID=dbadmin;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -44,11 +44,11 @@ namespace FinalProject.Pages
                             while (reader.Read())
                             {
                                 EmailInfo emailInfo = new EmailInfo();
-                                emailInfo.EmailID = "" + reader.GetInt32(0);
+                                emailInfo.EmailID = reader.GetInt32(0);
                                 emailInfo.EmailSubject = reader.GetString(1);
                                 emailInfo.EmailMessage = reader.GetString(2);
-                                emailInfo.EmailDate = reader.GetDateTime(3).ToString();
-                                emailInfo.EmailIsRead = "" + reader.GetInt32(4);
+                                emailInfo.EmailDate = reader.GetDateTime(3);
+                                emailInfo.EmailIsRead = reader.GetBoolean(4);
                                 emailInfo.EmailSender = reader.GetString(5);
                                 emailInfo.EmailReceiver = reader.GetString(6);
 
@@ -66,11 +66,11 @@ namespace FinalProject.Pages
     }
     public class EmailInfo
     {
-        public String EmailID;
+        public int EmailID;
         public String EmailSubject;
         public String EmailMessage;
-        public String EmailDate;
-        public String EmailIsRead;
+        public DateTime EmailDate;
+        public bool EmailIsRead;
         public String EmailSender;
         public String EmailReceiver;
     }
