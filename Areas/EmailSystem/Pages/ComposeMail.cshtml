@@ -6,27 +6,25 @@
     var subject = Request.Query["Subject"];
 }
 
-<h1>Compose an email</h1>
+<h1 class="text-center my-4 text-black">Compose an Email</h1>
 
-<form method="post">
-    <div>
-        <label for="receiver">Receiver</label>
-        <input name="Receiver" type="text" id="receiver" value="@receiver" />
-    </div>
+<div class="container">
+    <form method="post" class="p-4 bg-light shadow rounded">
+        <div class="mb-3">
+            <label for="receiver" class="form-label text-black">Receiver</label>
+            <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter recipient's email" />
+        </div>
 
-    <div>
-        <label for="subject">Subject</label>
-        <input name="Subject" type="text" id="subject" value="@subject" />
-    </div>
+        <div class="mb-3">
+            <label for="subject" class="form-label text-black">Subject</label>
+            <input name="Subject" type="text" id="subject" class="form-control" value="@subject" placeholder="Enter email subject" />
+        </div>
 
-    <div>
-        <label for="body">Body</label>
-        <textarea id="body" name="Body" rows="4" cols="50" placeholder="Type your message here..."></textarea>
-    </div>
+        <div class="mb-3">
+            <label for="body" class="form-label text-black">Body</label>
+            <textarea id="body" name="Body" class="form-control" rows="6" placeholder="Type your message here..."></textarea>
+        </div>
 
-    <button type="submit">Send</button>
-</form>
-
-
-
-
+        <button type="submit" class="btn btn-primary w-100">Send</button>
+    </form>
+</div>
