@@ -13,23 +13,23 @@ namespace FinalProject.Areas.EmailSystem.Pages
         public class EmailInfo
         {
             public int EmailID;
-            public String EmailSubject;
-            public String EmailMessage;
+            public String? EmailSubject;
+            public String? EmailMessage;
             public DateTime EmailDate;
-            public String EmailSender;
-            public String EmailReceiver;
+            public String? EmailSender;
+            public String? EmailReceiver;
         }
 
         private readonly string _connectionString;
 
-        public EmailInfo emailInfo;
+        public EmailInfo? emailInfo;
 
         public ReadEmailModel(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async void OnGet()
+        public void OnGet()
         {
             Request.Query.TryGetValue("EmailId", out StringValues emailId);
             String idString = emailId.ToString();

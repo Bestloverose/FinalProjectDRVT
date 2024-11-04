@@ -30,7 +30,7 @@ namespace FinalProject.Pages
                     connection.Open();
 
                     string username = "";
-                    if (User.Identity.Name == null)
+                    if (User.Identity?.Name == null)
                     {
                         username = "";
                     } else
@@ -38,7 +38,7 @@ namespace FinalProject.Pages
                         username = User.Identity.Name;
                     }
 
-                    String sql = "SELECT * FROM emails WHERE emailreceiver='"+username+"'";
+                    String sql = "SELECT * FROM emails WHERE EmailReceiver='"+username+"'";
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -58,6 +58,8 @@ namespace FinalProject.Pages
                             }
                         }
                     }
+
+                    Console.WriteLine(listEmails);
                 };
             }
             catch (Exception ex)
@@ -69,12 +71,12 @@ namespace FinalProject.Pages
     public class EmailInfo
     {
         public int EmailID;
-        public String EmailSubject;
-        public String EmailMessage;
+        public String? EmailSubject;
+        public String? EmailMessage;
         public DateTime EmailDate;
         public bool EmailIsRead;
-        public String EmailSender;
-        public String EmailReceiver;
+        public String? EmailSender;
+        public String? EmailReceiver;
     }
 
 }

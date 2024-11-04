@@ -23,7 +23,7 @@
                 <td>@item.EmailSender</td>
                 <td>
                     @if (item.EmailIsRead.Equals("0")) {
-                        <img src="images/yellow.gif" height="10pt"> 
+                        <img src="images/yellow.gif" height="10"> 
                     } 
                     <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a></td>
                 <td>@item.EmailDate</td>
@@ -34,4 +34,4 @@
         }
     </tbody>
 </table>
-<a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity.Name">Compose New Email</a>
+<a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name">Compose New Email</a>

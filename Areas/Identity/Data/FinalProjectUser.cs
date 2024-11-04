@@ -9,9 +9,9 @@ namespace FinalProject.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the FinalProjectUser class
 public class FinalProjectUser : IdentityUser
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string MobilePhone { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? MobilePhone { get; set; }
 
 }
 

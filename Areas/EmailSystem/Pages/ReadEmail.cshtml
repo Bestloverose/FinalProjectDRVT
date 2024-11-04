@@ -4,22 +4,63 @@
     ViewData["Title"] = "Read Email";
 }
 
-<h1>Email Details</h1>
+<div class="container mt-5">
+    <div class="card shadow-sm bg-light">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4">📧 Email</h1>
+        </div>
+        <div class="card-body">
+            @if (Model.emailInfo != null)
+            {
+                <!-- เปลี่ยนสีหัวข้ออีเมล -->
+                <h2 class="h5 email-subject">@Model.emailInfo.EmailSubject</h2>
 
-@if (Model.emailInfo != null)
-{
-<div>
-    <h2>@Model.emailInfo.EmailSubject</h2>
-    <p>Sender: @Model.emailInfo.EmailSender</p>
-    <p>Receiver: @Model.emailInfo.EmailReceiver</p>
-    <p>Date sent: @Model.emailInfo.EmailDate</p>
-    <br/>
-    <p>@Model.emailInfo.EmailMessage</p>
-    <br />
-    <a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity.Name&Receiver=@Model.emailInfo.EmailSender&Subject=Re: @Model.emailInfo.EmailSubject">Reply</a>
+                <!-- เปลี่ยนสีข้อความในแต่ละส่วน เช่น ผู้ส่ง ผู้รับ และวันที่ส่ง -->
+                <p><strong class="label-text">From:</strong> <span class="info-text">@Model.emailInfo.EmailSender</span></p>
+                <p><strong class="label-text">To:</strong> <span class="info-text">@Model.emailInfo.EmailReceiver</span></p>
+                <p><strong class="label-text">Date:</strong> <span class="info-text">@Model.emailInfo.EmailDate.ToString("MMMM dd, yyyy HH:mm")</span></p>
+
+                <hr />
+
+                <!-- เปลี่ยนสีของเนื้อหาข้อความอีเมล -->
+                <p class="email-message">@Model.emailInfo.EmailMessage</p>
+
+                <!-- ปุ่มตอบกลับ -->
+                <a class="btn btn-primary btn-sm mt-4" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name&Receiver=@Model.emailInfo.EmailSender&Subject=Re: @Model.emailInfo.EmailSubject">
+                    ✉️ reply
+                </a>
+            }
+            else
+            {
+                <!-- เปลี่ยนสีข้อความแจ้งเตือนเมื่อไม่พบอีเมล -->
+                <p class="text-danger">⚠️ ไม่พบอีเมล</p>
+            }
+        </div>
+    </div>
 </div>
-}
-else
-{
-<p>Email not found.</p>
-}
+
+<style>
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        background-color: #f8f9fa;
+    }
+    /* สีข้อความของหัวข้ออีเมล */
+    .email-subject {
+        color: #007bff; /* สีฟ้าหรือสีน้ำเงิน */
+    }
+    /* สีข้อความของผู้ส่ง ผู้รับ และวันที่ส่ง */
+    .label-text {
+        color: #333; /* สีเทาเข้ม */
+    }
+
+    .info-text {
+        color: #555; /* สีเทากลาง */
+    }
+    /* สีข้อความของเนื้อหาอีเมล */
+    .email-message {
+        color: #212529; /* สีดำอ่อนสำหรับเนื้อหา */
+    }
+</style>
