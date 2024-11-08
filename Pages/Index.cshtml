@@ -6,32 +6,38 @@
 
 <center><img src="images/logo.jpg" width="400" /></center>
 
+<a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name">Compose New Email</a>
+
 <table class="table">
-    <thread>
+    <thead>
         <tr>
             <th>From</th>
             <th>Subject</th>
             <th>Date/Time</th>
             <th>Delete</th>
         </tr>
-    </thread>
-
+    </thead>
     <tbody>
         @foreach (var item in Model.listEmails)
         {
             <tr>
                 <td>@item.EmailSender</td>
                 <td>
-                    @if (item.EmailIsRead.Equals("0")) {
-                        <img src="images/yellow.gif" height="10"> 
-                    } 
-                    <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a></td>
+                    @if (item.EmailIsRead.Equals("0"))
+                    {
+                        <img src="images/yellow.gif" height="10" />
+                    }
+                    <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a>
+                </td>
                 <td>@item.EmailDate</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="/EmailSystem/DeleteEmail?EmailId=@item.EmailID">Delete</a>
+                    <!-- ปุ่มลบที่ส่ง EmailId ไปยังหน้า DeleteEmail -->
+                    <form method="get" action="/EmailSystem/DeleteEmail">
+                        <input type="hidden" name="EmailId" value="@item.EmailID" />
+                        <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name">Compose New Email</a>

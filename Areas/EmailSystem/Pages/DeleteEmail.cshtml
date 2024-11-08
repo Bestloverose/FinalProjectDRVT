@@ -1,4 +1,21 @@
 ﻿@page
 @model FinalProject.Areas.EmailSystem.Pages.DeleteEmailModel
 @{
+    ViewData["Title"] = "Delete Email";
 }
+
+<h2>Delete Email</h2>
+
+<p>Are you sure you want to delete this email?</p>
+
+<form method="post" onsubmit="return confirmDelete()">
+    <input type="hidden" name="EmailId" value="@Request.Query["EmailId"]" />
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this email?");
+    }
+</script>

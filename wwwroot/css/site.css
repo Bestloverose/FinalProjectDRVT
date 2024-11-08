@@ -1,23 +1,30 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-  background-color: pink;
-  color: white;
+    margin-bottom: 60px;
+/*    background-image: url('/images/63.gif');*/
+    background-color: plum;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
 }
+
+
 
 th {
     color: white;
@@ -26,3 +33,22 @@ th {
 td {
     color: white;
 }
+.custom-navbar {
+    background-color: pink; /* เปลี่ยนสีพื้นหลังที่นี่ */
+    color: white; /* เปลี่ยนสีข้อความ */
+}
+
+.custom-navbar .navbar-nav .nav-link {
+        color: white; /* เปลี่ยนสีลิงก์ */
+    }
+
+.custom-navbar .navbar-nav .nav-link:hover {
+            color: #ffb84d; /* สีเมื่อเลื่อนเมาส์บนลิงก์ */
+        }
+.custom-navbar .navbar-brand {
+        color: white; /* สีของชื่อแบรนด์ */
+    }
+
+.custom-navbar .navbar-brand:hover {
+            color: #ffb84d; /* สีเมื่อเลื่อนเมาส์บนชื่อแบรนด์ */
+        }
