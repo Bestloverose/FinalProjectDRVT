@@ -12,27 +12,26 @@
         <div class="card-body">
             @if (Model.emailInfo != null)
             {
-                <!-- เปลี่ยนสีหัวข้ออีเมล -->
                 <h2 class="h5 email-subject">@Model.emailInfo.EmailSubject</h2>
 
-                <!-- เปลี่ยนสีข้อความในแต่ละส่วน เช่น ผู้ส่ง ผู้รับ และวันที่ส่ง -->
+                
                 <p><strong class="label-text">From:</strong> <span class="info-text">@Model.emailInfo.EmailSender</span></p>
                 <p><strong class="label-text">To:</strong> <span class="info-text">@Model.emailInfo.EmailReceiver</span></p>
                 <p><strong class="label-text">Date:</strong> <span class="info-text">@Model.emailInfo.EmailDate.ToString("MMMM dd, yyyy HH:mm")</span></p>
 
                 <hr />
 
-                <!-- เปลี่ยนสีของเนื้อหาข้อความอีเมล -->
+                
                 <p class="email-message">@Model.emailInfo.EmailMessage</p>
 
-                <!-- ปุ่มตอบกลับ -->
+                
                 <a class="btn btn-primary btn-sm mt-4" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name&Receiver=@Model.emailInfo.EmailSender&Subject=Re: @Model.emailInfo.EmailSubject">
                     ✉️ reply
                 </a>
             }
             else
             {
-                <!-- เปลี่ยนสีข้อความแจ้งเตือนเมื่อไม่พบอีเมล -->
+                
                 <p class="text-danger">⚠️ ไม่พบอีเมล</p>
             }
         </div>
@@ -47,20 +46,20 @@
     .card {
         background-color: #f8f9fa;
     }
-    /* สีข้อความของหัวข้ออีเมล */
+   
     .email-subject {
-        color: #007bff; /* สีฟ้าหรือสีน้ำเงิน */
+        color: #007bff;
     }
-    /* สีข้อความของผู้ส่ง ผู้รับ และวันที่ส่ง */
+    
     .label-text {
-        color: #333; /* สีเทาเข้ม */
+        color: #333;
     }
 
     .info-text {
-        color: #555; /* สีเทากลาง */
+        color: #555; 
     }
-    /* สีข้อความของเนื้อหาอีเมล */
+    
     .email-message {
-        color: #212529; /* สีดำอ่อนสำหรับเนื้อหา */
+        color: #212529; 
     }
 </style>

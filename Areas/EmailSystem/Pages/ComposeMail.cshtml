@@ -5,11 +5,14 @@
     var receiver = Request.Query["Receiver"];
     var subject = Request.Query["Subject"];
 }
-  
+
 <h1 class="text-center my-4 text-black">Compose an Email</h1>
 
 <div class="container">
     <form method="post" class="p-4 bg-light shadow rounded">
+        <!-- แสดงข้อความแจ้งเตือน -->
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
         <div class="mb-3">
             <label for="receiver" class="form-label text-black">Receiver</label>
             <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter recipient's email" />

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Identity;
 using System.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinalProject.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly string _connectionString;

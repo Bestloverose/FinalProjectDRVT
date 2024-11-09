@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Primitives;
-using NUnit.Framework;
 
 namespace FinalProject.Areas.EmailSystem.Pages
 {
@@ -26,26 +25,43 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // ตรวจสอบว่ามีฟิลด์ว่างเปล่า
+            if (string.IsNullOrWhiteSpace(Subject) || string.IsNullOrWhiteSpace(Body) || string.IsNullOrWhiteSpace(Receiver))
+            {
+                ModelState.AddModelError(string.Empty, "Please fill in the Subject, Body, and Receiver fields.");
+                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+            }
+
+            // ตรวจสอบว่า Sender และ Receiver ไม่เหมือนกัน
+            Request.Query.TryGetValue("Sender", out StringValues senderValue);
+            string sender = senderValue.ToString();
+
+            if (sender == Receiver)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot send an email to yourself.");
+                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+            }
+
+            // ถ้าผ่านการตรวจสอบแล้ว ให้บันทึกลงฐานข้อมูล
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                String query = "INSERT INTO Emails (EmailSubject, EmailMessage, EmailDate, EmailIsRead, EmailSender, EmailReceiver) VALUES (@EmailSubject, @EmailMessage, @EmailDate, @EmailIsRead, @EmailSender, @EmailReceiver)";
+                string query = "INSERT INTO Emails (EmailSubject, EmailMessage, EmailDate, EmailIsRead, EmailSender, EmailReceiver) VALUES (@EmailSubject, @EmailMessage, @EmailDate, @EmailIsRead, @EmailSender, @EmailReceiver)";
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    Request.Query.TryGetValue("Sender", out StringValues senderValue);
-                    String Sender = senderValue.ToString();
-
                     command.Parameters.AddWithValue("@EmailSubject", Subject);
                     command.Parameters.AddWithValue("@EmailMessage", Body);
                     command.Parameters.AddWithValue("@EmailDate", DateTime.Now);
                     command.Parameters.AddWithValue("@EmailIsRead", false);
-                    command.Parameters.AddWithValue("@EmailSender", Sender);
+                    command.Parameters.AddWithValue("@EmailSender", sender);
                     command.Parameters.AddWithValue("@EmailReceiver", Receiver);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
-            return RedirectToPage("/Index");
+
+            return RedirectToPage("/Index"); // กลับไปหน้า Index หลังจากบันทึกข้อมูลเสร็จ
         }
     }
 }

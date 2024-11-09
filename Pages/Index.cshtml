@@ -23,9 +23,15 @@
             <tr>
                 <td>@item.EmailSender</td>
                 <td>
-                    @if (item.EmailIsRead.Equals("0"))
+                    @if (item.EmailIsRead == false)
                     {
+                        <!-- ใช้ inline style เพื่อแสดงข้อความสีเหลืองสำหรับอีเมลที่ยังไม่ได้อ่าน -->
                         <img src="images/yellow.gif" height="10" />
+                    }
+                    else
+                    {
+                        <!-- ถ้าอีเมลอ่านแล้ว แสดงรูปภาพสีเขียว -->
+                        <img src="images/green.png" height="10" />
                     }
                     <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a>
                 </td>
