@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="card shadow-lg p-4 my-4 mx-auto  text-black" style="max-width: 500px;">
+<div class="card shadow-lg p-4 my-4 mx-auto text-black" style="max-width: 500px;">
     <h3 class="text-center">@ViewData["Title"]</h3>
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
@@ -15,28 +15,34 @@
             <span asp-validation-for="Input.FirstName" class="text-danger"></span>
         </div>
 
-        <div class="form-floating mb-3  text-black">
+        <div class="form-floating mb-3 text-black">
             <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" autocomplete="lastname" aria-required="true" />
             <label for="Input_LastName">Last Name</label>
             <span asp-validation-for="Input.LastName" class="text-danger"></span>
         </div>
 
-        <div class="form-floating mb-3  text-black">
+        <div class="form-floating mb-3 text-black">
             <input asp-for="Input.MobilePhone" class="form-control" placeholder="Mobile Phone" autocomplete="mobilephone" aria-required="true" />
             <label for="Input_MobilePhone">Mobile Phone</label>
             <span asp-validation-for="Input.MobilePhone" class="text-danger"></span>
         </div>
 
-        <div class="form-floating mb-3  text-black">
+        <div class="form-floating mb-3 text-black">
             <input asp-for="Input.UserName" class="form-control" placeholder="Username" autocomplete="username" aria-required="true" />
             <label for="Input_UserName">Username</label>
             <span asp-validation-for="Input.UserName" class="text-danger"></span>
         </div>
 
-        <div class="form-floating mb-4  text-black">
+        <div class="form-floating mb-4 text-black">
             <input asp-for="Input.Password" class="form-control" placeholder="Password" autocomplete="new-password" type="password" aria-required="true" />
             <label for="Input_Password">Password</label>
             <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-4 text-black">
+            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" autocomplete="new-password" type="password" aria-required="true" />
+            <label for="Input_ConfirmPassword">Confirm Password</label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
         </div>
 
         <button id="registerSubmit" type="submit" class="btn btn-primary w-100">Register</button>
@@ -46,3 +52,4 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+

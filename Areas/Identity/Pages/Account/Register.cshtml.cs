@@ -64,8 +64,10 @@ namespace FinalProject.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
             [Required]
-            [StringLength(15, ErrorMessage = "The Mobile Phone must be in between 7 to 15.", MinimumLength = 7)]
+            [RegularExpression(@"^\d{10}$", ErrorMessage = "กรุณาใส่หมายเลขโทรศัพท์ที่มี 10 หลัก (เฉพาะตัวเลข)")]
+            [StringLength(10, ErrorMessage = "หมายเลขโทรศัพท์ต้องมีความยาว 10 หลักเท่านั้น.")]
             public string MobilePhone { get; set; }
+
 
             [Required]
             [StringLength(255, ErrorMessage = "The Username must be between 1 to 255.", MinimumLength = 1)]
@@ -75,6 +77,11 @@ namespace FinalProject.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            public string ConfirmPassword { get; set; }
         }
 
 
@@ -88,6 +95,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -135,6 +143,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
 
         private FinalProjectUser CreateUser()
         {

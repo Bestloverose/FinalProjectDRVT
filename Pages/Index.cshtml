@@ -4,46 +4,91 @@
     ViewData["Title"] = "Home page";
 }
 
-<center><img src="images/logo.jpg" width="400" /></center>
+<style>
+    /* ตั้งค่าให้ body เป็นสีเทาอ่อน */
+    body {
+        background-image: url('images/test3.png');
+        background-size: cover; /* ทำให้ภาพพื้นหลังครอบคลุมทั้งหน้าจอ */
+        background-position: center; /* จัดตำแหน่งภาพไว้กลาง */
+        background-repeat: no-repeat; /* ไม่ให้ภาพพื้นหลังซ้ำ */
+    }
 
-<a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name">Compose New Email</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>From</th>
-            <th>Subject</th>
-            <th>Date/Time</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.listEmails)
-        {
-            <tr>
-                <td>@item.EmailSender</td>
-                <td>
-                    @if (item.EmailIsRead == false)
-                    {
-                        <!-- ใช้ inline style เพื่อแสดงข้อความสีเหลืองสำหรับอีเมลที่ยังไม่ได้อ่าน -->
-                        <img src="images/yellow.gif" height="10" />
-                    }
-                    else
-                    {
-                        <!-- ถ้าอีเมลอ่านแล้ว แสดงรูปภาพสีเขียว -->
-                        <img src="images/green.png" height="10" />
-                    }
-                    <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a>
-                </td>
-                <td>@item.EmailDate</td>
-                <td>
-                    <!-- ปุ่มลบที่ส่ง EmailId ไปยังหน้า DeleteEmail -->
-                    <form method="get" action="/EmailSystem/DeleteEmail">
-                        <input type="hidden" name="EmailId" value="@item.EmailID" />
-                        <button type="submit" class="btn btn-primary btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
+    /* ตั้งค่าให้กรอบสีขาวตรงกลาง */
+    .email-container {
+        background-color: white;
+        max-width: 1300px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* สไตล์ให้กับตาราง */
+    .table {
+        border-collapse: separate;
+        width: 100%;
+        color: black; /* ตั้งสีของข้อความเป็นสีเข้ม */
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+             color: black;
         }
-    </tbody>
-</table>
+
+        .table th {
+            color: #555; /* ตั้งสีหัวตาราง */
+        }
+
+    /* สไตล์ให้กับปุ่ม */
+        .btn:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+</style>
+
+<!-- สร้างกรอบอีเมลในกลางหน้าด้วยสีพื้นหลังขาว -->
+<div class="email-container">
+    <center><img src="images/test15.png" width="400" /></center>
+
+    <a class="btn btn-primary btn-sm" href="/EmailSystem/ComposeMail?Sender=@User.Identity?.Name">Compose New Email</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Date/Time</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.listEmails)
+            {
+                <tr>
+                    <td>@item.EmailSender</td>
+                    <td>
+                        @if (item.EmailIsRead == false)
+                        {
+                            <img src="images/yellow.gif" height="10" />
+                        }
+                        else
+                        {
+                            <img src="images/green.png" height="10" />
+                        }
+                        <a href="/EmailSystem/ReadEmail?EmailId=@item.EmailID">@item.EmailSubject</a>
+                    </td>
+                    <td>@item.EmailDate</td>
+                    <td>
+                        <form method="get" action="/EmailSystem/DeleteEmail">
+                            <input type="hidden" name="EmailId" value="@item.EmailID" />
+                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

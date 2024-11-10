@@ -15,8 +15,7 @@ html {
 
 body {
     margin-bottom: 60px;
-/*    background-image: url('/images/63.gif');*/
-    background-color: plum;
+    background-image: url('/images/test3.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -34,7 +33,7 @@ td {
     color: white;
 }
 .custom-navbar {
-    background-color: pink; /* เปลี่ยนสีพื้นหลังที่นี่ */
+    background-color: Azure; /* เปลี่ยนสีพื้นหลังที่นี่ */
     color: white; /* เปลี่ยนสีข้อความ */
 }
 

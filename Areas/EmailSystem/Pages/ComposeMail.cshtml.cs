@@ -25,11 +25,26 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // ตรวจสอบว่ามีฟิลด์ว่างเปล่า
-            if (string.IsNullOrWhiteSpace(Subject) || string.IsNullOrWhiteSpace(Body) || string.IsNullOrWhiteSpace(Receiver))
+            // ตรวจสอบว่ามีฟิลด์ Subject, Body, และ Receiver ว่างเปล่า
+            if (string.IsNullOrWhiteSpace(Subject))
             {
-                ModelState.AddModelError(string.Empty, "Please fill in the Subject, Body, and Receiver fields.");
-                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+                ModelState.AddModelError("Subject", "Please fill in the Subject field.");
+            }
+
+            if (string.IsNullOrWhiteSpace(Body))
+            {
+                ModelState.AddModelError("Body", "Please fill in the Body field.");
+            }
+
+            if (string.IsNullOrWhiteSpace(Receiver))
+            {
+                ModelState.AddModelError("Receiver", "Please fill in the Receiver field.");
+            }
+
+            // ถ้ามีข้อผิดพลาดใด ๆ ให้แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+            if (!ModelState.IsValid)
+            {
+                return Page();
             }
 
             // ตรวจสอบว่า Sender และ Receiver ไม่เหมือนกัน
@@ -39,6 +54,32 @@ namespace FinalProject.Areas.EmailSystem.Pages
             if (sender == Receiver)
             {
                 ModelState.AddModelError(string.Empty, "You cannot send an email to yourself.");
+                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+            }
+
+            // ตรวจสอบว่า Receiver มีในฐานข้อมูลหรือไม่
+            bool receiverExists = false;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM AspNetUsers WHERE Email = @Receiver"; // เปลี่ยนเป็นชื่อเทเบิลที่ถูกต้อง
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Receiver", Receiver);
+                    int count = (int)await command.ExecuteScalarAsync();
+
+                    if (count > 0)
+                    {
+                        receiverExists = true;
+                    }
+                }
+            }
+
+            if (!receiverExists)
+            {
+                // แสดงข้อความผิดพลาดกรณีผู้รับไม่มีในฐานข้อมูล
+                ModelState.AddModelError("Receiver", "The receiver does not exist. This user has not registered yet.");
                 return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
             }
 

@@ -29,9 +29,34 @@
                     <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
                 </div>
             </form>
+            <div class="mt-3 text-center text-black">
+                <p>Don't have an account?</p>
+                <div class="BTN1">
+                    <a href="/Identity/Account/Register" class="btn btn-secondary">Register</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<style>
+    .BTN1 a {
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .BTN1 a:hover {
+            background-color: blue; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+            color: black; /* เปลี่ยนสีข้อความเมื่อ hover */
+        }
+
+    #login-submit {
+        width: 200px; /* กำหนด padding ให้ปุ่มเล็กลง */
+        font-size: 14px; /* ลดขนาดฟอนต์ให้เล็กลง */
+        margin: 0 auto;
+    }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
