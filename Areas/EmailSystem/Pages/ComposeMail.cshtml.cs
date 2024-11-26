@@ -22,7 +22,8 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
         [BindProperty]
         public string? Receiver { get; set; }
-
+        
+        
         public async Task<IActionResult> OnPostAsync()
         {
             // ตรวจสอบว่ามีฟิลด์ Subject, Body, และ Receiver ว่างเปล่า
@@ -50,12 +51,20 @@ namespace FinalProject.Areas.EmailSystem.Pages
             // ตรวจสอบว่า Sender และ Receiver ไม่เหมือนกัน
             Request.Query.TryGetValue("Sender", out StringValues senderValue);
             string sender = senderValue.ToString();
+            
+            if (sender != User.Identity?.Name)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot send an email as another person.");
+                return Page();
+            }
 
             if (sender == Receiver)
             {
                 ModelState.AddModelError(string.Empty, "You cannot send an email to yourself.");
                 return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
             }
+            
+            
 
             // ตรวจสอบว่า Receiver มีในฐานข้อมูลหรือไม่
             bool receiverExists = false;
@@ -91,9 +100,18 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    // Specify Bangkok timezone
+                    TimeZoneInfo bangkokTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
+                    // Get the current UTC time
+                    DateTimeOffset utcNow = DateTimeOffset.UtcNow;
+
+                    // Convert UTC time to Bangkok time
+                    DateTimeOffset bangkokTime = TimeZoneInfo.ConvertTime(utcNow, bangkokTimeZone);
+
                     command.Parameters.AddWithValue("@EmailSubject", Subject);
                     command.Parameters.AddWithValue("@EmailMessage", Body);
-                    command.Parameters.AddWithValue("@EmailDate", DateTime.Now);
+                    command.Parameters.AddWithValue("@EmailDate", bangkokTime);
                     command.Parameters.AddWithValue("@EmailIsRead", false);
                     command.Parameters.AddWithValue("@EmailSender", sender);
                     command.Parameters.AddWithValue("@EmailReceiver", Receiver);

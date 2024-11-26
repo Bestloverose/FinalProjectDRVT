@@ -40,7 +40,7 @@ namespace FinalProject.Pages
                         username = User.Identity.Name;
                     }
 
-                    String sql = "SELECT * FROM emails WHERE EmailReceiver='"+username+"'";
+                    String sql = "SELECT * FROM emails WHERE EmailReceiver COLLATE Latin1_General_BIN ='" + username+"'";
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())

@@ -1,11 +1,18 @@
 ﻿@page
 @model FinalProject.Areas.EmailSystem.Pages.ComposeMailModel
+@using FinalProject.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<FinalProjectUser> SignInManager
+@inject UserManager<FinalProjectUser> UserManager
 @{
     ViewData["Title"] = "Compose Mail";
     var receiver = Request.Query["Receiver"];
     var subject = Request.Query["Subject"];
     var successMessage = TempData["SuccessMessage"] as string; // ดึงข้อความจาก TempData
 }
+@if (SignInManager.IsSignedIn(User))
+{
+    
 
 <h1 class="text-center my-4">Compose an Email</h1>
 
@@ -52,4 +59,9 @@
             }
         });
     </script>
+    }
+}
+else
+{
+    <p>You have to log in first in order to send an email.</p>
 }
