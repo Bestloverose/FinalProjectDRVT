@@ -102,7 +102,12 @@ namespace FinalProject.Areas.EmailSystem.Pages
                 }
             }
 
-            return RedirectToPage("/Index"); // กลับไปหน้า Index หลังจากบันทึกข้อมูลเสร็จ
+            // เพิ่มข้อความสำเร็จที่จะแสดงหลังจากส่งอีเมล
+            TempData["SuccessMessage"] = "Your email has been sent successfully.";
+
+            // Redirect to the same page or any other page you prefer
+            return RedirectToPage(); // กลับไปหน้าเดิมหลังจากบันทึกข้อมูลเสร็จ
         }
+
     }
 }

@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Primitives;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Microsoft.AspNetCore.Identity;
-
 
 namespace FinalProject.Areas.EmailSystem.Pages
 {
@@ -42,7 +39,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
                 SqlCommand command1 = new SqlCommand(query, connection);
                 command1.Parameters.AddWithValue("@EmailId", id);
                 using (SqlDataReader reader = command1.ExecuteReader())
-                { 
+                {
                     if (reader.Read())
                     {
                         emailInfo = new EmailInfo
@@ -52,7 +49,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
                             EmailMessage = reader.GetString(2),
                             EmailDate = reader.GetDateTime(3),
                             EmailSender = reader.GetString(4),
-                            EmailReceiver = reader.GetString(5)
+                            EmailReceiver = reader.GetString(5),
                         };
                     }
                 }

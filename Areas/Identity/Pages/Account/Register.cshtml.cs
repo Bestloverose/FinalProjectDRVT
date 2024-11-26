@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.Areas.Identity.Pages.Account
 {
@@ -55,23 +56,33 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [StringLength(255, ErrorMessage = "The First Name must be in between 1 to 255.", MinimumLength = 1)]
+            [Required(ErrorMessage = "First Name is required.")]
+            [StringLength(255, ErrorMessage = "The First Name must be between 1 and 255 characters.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Zก-์]+$", ErrorMessage = "The First Name can contain only English letters and Thai letters.")]
             public string FirstName { get; set; }
 
-            [Required]
-            [StringLength(255, ErrorMessage = "The Last Name must be in between 1 to 255.", MinimumLength = 1)]
+            [Required(ErrorMessage = "Last Name is required.")]
+            [StringLength(255, ErrorMessage = "The Last Name must be between 1 and 255 characters.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Zก-์]+$", ErrorMessage = "The Last Name can contain only English letters and Thai letters.")]
             public string LastName { get; set; }
 
-            [Required]
-            [RegularExpression(@"^\d{10}$", ErrorMessage = "กรุณาใส่หมายเลขโทรศัพท์ที่มี 10 หลัก (เฉพาะตัวเลข)")]
-            [StringLength(10, ErrorMessage = "หมายเลขโทรศัพท์ต้องมีความยาว 10 หลักเท่านั้น.")]
+
+
+
+
+
+            [Required(ErrorMessage = "Phone number is required.")]
+            [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a 10-digit phone number (numbers only).")]
+            [StringLength(10, ErrorMessage = "Phone number must be exactly 10 digits.")]
             public string MobilePhone { get; set; }
+
 
 
             [Required]
             [StringLength(255, ErrorMessage = "The Username must be between 1 to 255.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The Username must only contain English letters (no numbers or special characters).")]
             public string UserName { get; set; }
+
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -98,8 +109,14 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                // ตรวจสอบว่า username ซ้ำหรือไม่
+                if (await IsNameOrUsernameDuplicateAsync(Input.FirstName, Input.LastName, Input.UserName))
+                {
+                    ModelState.AddModelError(string.Empty, "The username already exists.");
+                    return Page();
+                }
 
+                var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.MobilePhone = Input.MobilePhone;
@@ -134,6 +151,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -143,6 +161,19 @@ namespace FinalProject.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
+        private async Task<bool> IsNameOrUsernameDuplicateAsync(string firstName, string lastName, string username)
+        {
+            // ตรวจสอบว่า username ซ้ำหรือไม่ (ไม่ตรวจสอบ FirstName และ LastName)
+            var duplicateUser = await _userManager.Users
+                .Where(u => u.UserName == username)
+                .FirstOrDefaultAsync();
+
+            return duplicateUser != null;
+        }
+
+
 
 
         private FinalProjectUser CreateUser()

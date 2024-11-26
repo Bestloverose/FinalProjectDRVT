@@ -4,13 +4,22 @@
     ViewData["Title"] = "Compose Mail";
     var receiver = Request.Query["Receiver"];
     var subject = Request.Query["Subject"];
+    var successMessage = TempData["SuccessMessage"] as string; // ดึงข้อความจาก TempData
 }
 
-<h1 class="text-center my-4 text-black">Compose an Email</h1>
+<h1 class="text-center my-4">Compose an Email</h1>
 
 <div class="container">
+    <!-- แสดงข้อความแจ้งเตือนหากมี -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success" id="successMessage">
+            @successMessage
+        </div>
+    }
+
     <form method="post" class="p-4 bg-light shadow rounded">
-        <!-- แสดงข้อความแจ้งเตือน -->
+        <!-- แสดงข้อความแจ้งเตือนจาก ModelState -->
         <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
         <div class="mb-3">
@@ -31,3 +40,16 @@
         <button type="submit" class="btn btn-primary w-100">Send</button>
     </form>
 </div>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <script>
+        // แสดงข้อความแจ้งเตือนทันทีหลังจากส่งอีเมลสำเร็จ
+        document.addEventListener("DOMContentLoaded", function () {
+            var successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                successMessage.style.display = 'block';
+            }
+        });
+    </script>
+}

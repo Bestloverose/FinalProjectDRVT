@@ -5,22 +5,33 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="container my-5">
-    <h3 class="text-center mb-4">@ViewData["Title"]</h3>
-
-    <div class="card">
+<div class="form-container my-5 d-flex justify-content-center align-items-center">
+    <div class="card" style="width: 400px;">
         <div class="card-body">
+            <h3 class="text-center mb-4">@ViewData["Title"]</h3>
+
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-                <div class="mb-3 form-floating text-black">
-                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Username" />
+                <!-- Username Input -->
+                <div class="mb-3 form-floating">
+                    <input asp-for="Input.UserName"
+                           class="form-control input-custom"
+                           autocomplete="username"
+                           aria-required="true"
+                           placeholder="Username" />
                     <label for="Input_UserName">Username</label>
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3 form-floating text-black">
-                    <input asp-for="Input.Password" class="form-control" type="password" autocomplete="current-password" aria-required="true" placeholder="Password" />
+                <!-- Password Input -->
+                <div class="mb-3 form-floating">
+                    <input asp-for="Input.Password"
+                           class="form-control input-custom"
+                           type="password"
+                           autocomplete="current-password"
+                           aria-required="true"
+                           placeholder="Password" />
                     <label for="Input_Password">Password</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
@@ -29,25 +40,22 @@
                     <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
                 </div>
             </form>
-            <div class="mt-3 text-center text-black">
-                <p>Don't have an account?</p>
-                <div class="BTN1">
-                    <a href="/Identity/Account/Register" class="btn btn-secondary">Register</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+
 <style>
     .BTN1 a {
         text-decoration: none;
         padding: 10px 20px;
         border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        background-color: lightgray;
+        border-color: lightgray;
+        color: black;
     }
 
         .BTN1 a:hover {
-            background-color: blue; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+            background-color: orange; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
             color: black; /* เปลี่ยนสีข้อความเมื่อ hover */
         }
 
@@ -55,7 +63,52 @@
         width: 200px; /* กำหนด padding ให้ปุ่มเล็กลง */
         font-size: 14px; /* ลดขนาดฟอนต์ให้เล็กลง */
         margin: 0 auto;
+        color : black;
     }
+
+    .btn-primary {
+        background-color: lightgray; /* สีพื้นหลังหลัก */
+        border-color: lightgray; /* สีของขอบปุ่ม */
+        color: white; /* สีตัวอักษร */
+    }
+
+        /* เปลี่ยนสีเมื่อวางเมาส์บนปุ่ม */
+        .btn-primary:hover {
+            background-color: orange; /* สีเมื่อวางเมาส์ */
+            border-color: orange;
+        }
+
+        /* สีเมื่อกดปุ่ม */
+        .btn-primary:active {
+            background-color: orange;
+            border-color: orange;
+        }
+
+    .form-floating label {
+        color: #6c757d; /* สีเทาอ่อน */
+        font-size: 14px; /* ปรับขนาดฟอนต์ให้ชัดเจน */
+    }
+
+    /* เมื่อผู้ใช้พิมพ์ใน input หรือช่องถูกโฟกัส */
+    .form-floating input:focus ~ label,
+    .form-floating input:not(:placeholder-shown) ~ label {
+        color: #000; /* เปลี่ยนเป็นสีดำเมื่อเลื่อนขึ้น */
+        font-size: 12px; /* ขนาดเล็กลงเมื่อยกขึ้น */
+        top: -10px; /* ปรับตำแหน่งให้เลื่อนขึ้น */
+    }
+
+    .form-container {
+        margin-top: 150px !important;
+    }
+
+    .card {
+        background-color: purple; /* สีพื้นหลังใหม่ */
+        padding: 20px; /* เพิ่มระยะขอบด้านใน */
+        border-radius: 10px; /* มุมโค้ง */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    }
+
+
 </style>
 
 @section Scripts {
