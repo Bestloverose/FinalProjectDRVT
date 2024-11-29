@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
@@ -37,6 +41,10 @@
 
   <ItemGroup>
     <Folder Include="Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\.editorconfig" />
   </ItemGroup>
 
 </Project>

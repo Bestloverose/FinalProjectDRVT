@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Primitives;
+using System.Text.RegularExpressions;
 
 namespace FinalProject.Areas.EmailSystem.Pages
 {
@@ -22,37 +23,34 @@ namespace FinalProject.Areas.EmailSystem.Pages
 
         [BindProperty]
         public string? Receiver { get; set; }
-        
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
-            // ตรวจสอบว่ามีฟิลด์ Subject, Body, และ Receiver ว่างเปล่า
+            // Validate input fields
             if (string.IsNullOrWhiteSpace(Subject))
-            {
-                ModelState.AddModelError("Subject", "Please fill in the Subject field.");
-            }
+                ModelState.AddModelError(nameof(Subject), "Please fill in the Subject field.");
 
             if (string.IsNullOrWhiteSpace(Body))
-            {
-                ModelState.AddModelError("Body", "Please fill in the Body field.");
-            }
+                ModelState.AddModelError(nameof(Body), "Please fill in the Body field.");
 
             if (string.IsNullOrWhiteSpace(Receiver))
+                ModelState.AddModelError(nameof(Receiver), "Please fill in the Receiver field.");
+
+            // Validate Receiver username format (no special characters, just alphanumeric)
+            if (!string.IsNullOrWhiteSpace(Receiver) &&
+                !Regex.IsMatch(Receiver, @"^[a-zA-Z0-9_]+$"))
             {
-                ModelState.AddModelError("Receiver", "Please fill in the Receiver field.");
+                ModelState.AddModelError(nameof(Receiver), "Please enter a valid username.");
             }
 
-            // ถ้ามีข้อผิดพลาดใด ๆ ให้แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
-            // ตรวจสอบว่า Sender และ Receiver ไม่เหมือนกัน
+            // Retrieve and validate the sender
             Request.Query.TryGetValue("Sender", out StringValues senderValue);
             string sender = senderValue.ToString();
-            
-            if (sender != User.Identity?.Name)
+
+            if (string.IsNullOrWhiteSpace(sender) || sender != User.Identity?.Name)
             {
                 ModelState.AddModelError(string.Empty, "You cannot send an email as another person.");
                 return Page();
@@ -61,71 +59,86 @@ namespace FinalProject.Areas.EmailSystem.Pages
             if (sender == Receiver)
             {
                 ModelState.AddModelError(string.Empty, "You cannot send an email to yourself.");
-                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
+                return Page();
             }
-            
-            
 
-            // ตรวจสอบว่า Receiver มีในฐานข้อมูลหรือไม่
-            bool receiverExists = false;
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-                string query = "SELECT COUNT(*) FROM AspNetUsers WHERE Email = @Receiver"; // เปลี่ยนเป็นชื่อเทเบิลที่ถูกต้อง
+                // ตรวจสอบว่า receiver มีอยู่ในฐานข้อมูล
+                bool receiverExists;
+                string receiverFromDatabase = string.Empty; // ตัวแปรสำหรับเก็บข้อมูลชื่อผู้รับจากฐานข้อมูล
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@Receiver", Receiver);
-                    int count = (int)await command.ExecuteScalarAsync();
-
-                    if (count > 0)
+                    await connection.OpenAsync();
+                    string query = "SELECT Username FROM AspNetUsers WHERE Username = @Receiver"; // ดึงแค่ Username ของ receiver
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        receiverExists = true;
+                        command.Parameters.AddWithValue("@Receiver", Receiver);
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                receiverFromDatabase = reader.GetString(0); // รับข้อมูลจากฐานข้อมูล
+                                receiverExists = true;
+                            }
+                            else
+                            {
+                                receiverExists = false;
+                            }
+                        }
                     }
                 }
-            }
 
-            if (!receiverExists)
-            {
-                // แสดงข้อความผิดพลาดกรณีผู้รับไม่มีในฐานข้อมูล
-                ModelState.AddModelError("Receiver", "The receiver does not exist. This user has not registered yet.");
-                return Page(); // แสดงหน้าเดิมพร้อมข้อความแสดงข้อผิดพลาด
-            }
-
-            // ถ้าผ่านการตรวจสอบแล้ว ให้บันทึกลงฐานข้อมูล
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = "INSERT INTO Emails (EmailSubject, EmailMessage, EmailDate, EmailIsRead, EmailSender, EmailReceiver) VALUES (@EmailSubject, @EmailMessage, @EmailDate, @EmailIsRead, @EmailSender, @EmailReceiver)";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
+                // ถ้า receiver ไม่มีในฐานข้อมูล
+                if (!receiverExists)
                 {
-                    // Specify Bangkok timezone
-                    TimeZoneInfo bangkokTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-
-                    // Get the current UTC time
-                    DateTimeOffset utcNow = DateTimeOffset.UtcNow;
-
-                    // Convert UTC time to Bangkok time
-                    DateTimeOffset bangkokTime = TimeZoneInfo.ConvertTime(utcNow, bangkokTimeZone);
-
-                    command.Parameters.AddWithValue("@EmailSubject", Subject);
-                    command.Parameters.AddWithValue("@EmailMessage", Body);
-                    command.Parameters.AddWithValue("@EmailDate", bangkokTime);
-                    command.Parameters.AddWithValue("@EmailIsRead", false);
-                    command.Parameters.AddWithValue("@EmailSender", sender);
-                    command.Parameters.AddWithValue("@EmailReceiver", Receiver);
-
-                    await command.ExecuteNonQueryAsync();
+                    ModelState.AddModelError(nameof(Receiver), "The receiver does not exist. This user has not registered yet.");
+                    return Page();
                 }
+
+                // เปรียบเทียบ Receiver กับชื่อผู้รับในฐานข้อมูลแบบ case-sensitive
+                if (!string.Equals(Receiver, receiverFromDatabase, StringComparison.Ordinal))
+                {
+                    ModelState.AddModelError(nameof(Receiver), "Your email has been sent ErrorMessage.");
+                    return Page();
+                }
+
+                // ส่วนการส่งอีเมล
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string query = @"
+                                INSERT INTO Emails 
+                                (EmailSubject, EmailMessage, EmailDate, EmailIsRead, EmailSender, EmailReceiver) 
+                                VALUES 
+                                (@EmailSubject, @EmailMessage, @EmailDate, @EmailIsRead, @EmailSender, @EmailReceiver)";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        TimeZoneInfo bangkokTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+                        DateTimeOffset bangkokTime = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, bangkokTimeZone);
+
+                        command.Parameters.AddWithValue("@EmailSubject", Subject);
+                        command.Parameters.AddWithValue("@EmailMessage", Body);
+                        command.Parameters.AddWithValue("@EmailDate", bangkokTime);
+                        command.Parameters.AddWithValue("@EmailIsRead", false);
+                        command.Parameters.AddWithValue("@EmailSender", sender);
+                        command.Parameters.AddWithValue("@EmailReceiver", Receiver); // ไม่ต้องแปลงตัวพิมพ์
+
+                        await command.ExecuteNonQueryAsync();
+
+                        TempData["SuccessMessage"] = "Your email has been sent successfully.";
+                    }
+                }
+
+                return RedirectToPage();
             }
-
-            // เพิ่มข้อความสำเร็จที่จะแสดงหลังจากส่งอีเมล
-            TempData["SuccessMessage"] = "Your email has been sent successfully.";
-
-            // Redirect to the same page or any other page you prefer
-            return RedirectToPage(); // กลับไปหน้าเดิมหลังจากบันทึกข้อมูลเสร็จ
+            catch (SqlException ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while sending the email.");
+                return Page();
+            }
         }
-
     }
 }

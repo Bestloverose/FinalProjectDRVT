@@ -22,10 +22,11 @@ namespace FinalProject.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<FinalProjectUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<FinalProjectUser> signInManager, ILogger<LoginModel> logger)
+        private readonly UserManager<FinalProjectUser> _userManager;
+        public LoginModel(SignInManager<FinalProjectUser> signInManager, UserManager<FinalProjectUser> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -98,31 +99,37 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                // ตรวจสอบ case-sensitive ของ UserName ด้วยการใช้ StringComparer.Ordinal
+                var user = await _userManager.FindByNameAsync(Input.UserName);
+
+                if (user != null && string.Equals(user.UserName, Input.UserName, StringComparison.Ordinal))
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    // ถ้าผู้ใช้พบและชื่อผู้ใช้ตรงตามที่ป้อนใน Input.UserName
+                    var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
                 }
                 else
                 {
+                    // ถ้าผู้ใช้ไม่พบหรือชื่อผู้ใช้ไม่ตรง
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

@@ -1,0 +1,99 @@
+﻿
+.btn {
+    background-color: #28a745; /* สีพื้นหลัง */
+    color: white; /* สีข้อความ */
+    padding: 10px 20px; /* ระยะห่างภายในปุ่ม */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    border: none; /* ลบขอบของปุ่ม */
+    border-radius: 5px; /* มุมโค้ง */
+    cursor: pointer; /* เปลี่ยนเมาส์เป็น pointer */
+    transition: background-color 0.3s, transform 0.2s; /* เพิ่มเอฟเฟ็กต์ */
+}
+
+.btn:hover {
+    background-color: #218838; /* สีพื้นหลังเมื่อ hover */
+    transform: scale(1.05); /* ขยายเล็กน้อยเมื่อ hover */
+}
+
+.btn:active {
+    background-color: #1e7e34; /* สีพื้นหลังเมื่อกดปุ่ม */
+    transform: scale(0.98); /* ย่อเล็กน้อยเมื่อกดปุ่ม */
+}
+
+.BTN1 a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: lightgray;
+    border-color: lightgray;
+    color: black;
+}
+
+    .BTN1 a:hover {
+        background-color: orange; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+        color: black; /* เปลี่ยนสีข้อความเมื่อ hover */
+    }
+
+#login-submit {
+    width: 200px; /* กำหนด padding ให้ปุ่มเล็กลง */
+    font-size: 14px; /* ลดขนาดฟอนต์ให้เล็กลง */
+    margin: 0 auto;
+    color: black;
+}
+
+.btn-primary {
+    background-color: lightgray; /* สีพื้นหลังหลัก */
+    border-color: lightgray; /* สีของขอบปุ่ม */
+    color: white; /* สีตัวอักษร */
+}
+
+    /* เปลี่ยนสีเมื่อวางเมาส์บนปุ่ม */
+    .btn-primary:hover {
+        background-color: orange; /* สีเมื่อวางเมาส์ */
+        border-color: orange;
+    }
+
+    /* สีเมื่อกดปุ่ม */
+    .btn-primary:active {
+        background-color: orange;
+        border-color: orange;
+    }
+
+.form-floating label {
+    color: #6c757d; /* สีเทาอ่อน */
+    font-size: 14px; /* ปรับขนาดฟอนต์ให้ชัดเจน */
+}
+
+/* เมื่อผู้ใช้พิมพ์ใน input หรือช่องถูกโฟกัส */
+.form-floating input:focus ~ label,
+.form-floating input:not(:placeholder-shown) ~ label {
+    color: #000; /* เปลี่ยนเป็นสีดำเมื่อเลื่อนขึ้น */
+    font-size: 12px; /* ขนาดเล็กลงเมื่อยกขึ้น */
+    top: -10px; /* ปรับตำแหน่งให้เลื่อนขึ้น */
+}
+
+.form-container {
+    margin-top: 150px !important;
+}
+
+.card {
+    background-color: #FC8F54; /* สีพื้นหลังใหม่ */
+    padding: 20px; /* เพิ่มระยะขอบด้านใน */
+    border-radius: 10px; /* มุมโค้ง */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    margin-left: auto; /* ชิดขวา */
+    margin-right: 0; /* ให้แน่ใจว่าไม่มีระยะขอบทางขวา */
+    height: 500px;
+}
+.text-center {
+    text-align: center; /* จัดข้อความให้กึ่งกลาง */
+    font-family: 'Arial', sans-serif; /* กำหนดฟอนต์ */
+    font-size: 40px; /* ขนาดฟอนต์ */
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem; /* กำหนดระยะห่างด้านล่าง */
+}
+
+
+

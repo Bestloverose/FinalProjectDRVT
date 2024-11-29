@@ -9,59 +9,78 @@
     var receiver = Request.Query["Receiver"];
     var subject = Request.Query["Subject"];
     var successMessage = TempData["SuccessMessage"] as string; // ดึงข้อความจาก TempData
+    var errorMessage = TempData["ErrorMessage"] as string;   // ดึงข้อความจาก TempData สำหรับข้อผิดพลาด
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    
+    <h1 class="text-center my-4">Compose an Email</h1>
 
-<h1 class="text-center my-4">Compose an Email</h1>
+    <div class="container">
+        <!-- แสดงข้อความแจ้งเตือนหากมี -->
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success" id="successMessage">
+                @successMessage
+            </div>
+        }
 
-<div class="container">
-    <!-- แสดงข้อความแจ้งเตือนหากมี -->
-    @if (!string.IsNullOrEmpty(successMessage))
-    {
-        <div class="alert alert-success" id="successMessage">
-            @successMessage
-        </div>
-    }
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger" id="errorMessage">
+                @errorMessage
+            </div>
+        }
 
-    <form method="post" class="p-4 bg-light shadow rounded">
-        <!-- แสดงข้อความแจ้งเตือนจาก ModelState -->
-        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <form method="post" class="p-4 bg-light shadow rounded">
+            <!-- แสดงข้อความแจ้งเตือนจาก ModelState -->
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-        <div class="mb-3">
-            <label for="receiver" class="form-label text-black">Receiver</label>
-            <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter recipient's email" />
-        </div>
+            <div class="mb-3">
+                <label for="receiver" class="form-label text-black">Receiver</label>
+                <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter Recipient's Username" />
+            </div>
 
-        <div class="mb-3">
-            <label for="subject" class="form-label text-black">Subject</label>
-            <input name="Subject" type="text" id="subject" class="form-control" value="@subject" placeholder="Enter email subject" />
-        </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label text-black">Subject</label>
+                <input name="Subject" type="text" id="subject" class="form-control" value="@subject" placeholder="Enter Username Subject" />
+            </div>
 
-        <div class="mb-3">
-            <label for="body" class="form-label text-black">Body</label>
-            <textarea id="body" name="Body" class="form-control" rows="6" placeholder="Type your message here..."></textarea>
-        </div>
+            <div class="mb-3">
+                <label for="body" class="form-label text-black">Body</label>
+                <textarea id="body" name="Body" class="form-control" rows="6" placeholder="Type your message here..."></textarea>
+            </div>
 
-        <button type="submit" class="btn btn-primary w-100">Send</button>
-    </form>
-</div>
+            <button type="submit" class="btn btn-primary w-100">Send</button>
+        </form>
+    </div>
 
-@if (!string.IsNullOrEmpty(successMessage))
-{
     <script>
         // แสดงข้อความแจ้งเตือนทันทีหลังจากส่งอีเมลสำเร็จ
         document.addEventListener("DOMContentLoaded", function () {
             var successMessage = document.getElementById('successMessage');
+            var errorMessage = document.getElementById('errorMessage');
+
             if (successMessage) {
                 successMessage.style.display = 'block';
+                // ซ่อนข้อความสำเร็จหลังจาก 5 วินาที
+                setTimeout(function () {
+                    successMessage.style.display = 'none';
+                }, 5000); // 5 วินาที
+            }
+
+            if (errorMessage) {
+                errorMessage.style.display = 'block';
+                // ซ่อนข้อความข้อผิดพลาดหลังจาก 5 วินาที
+                setTimeout(function () {
+                    errorMessage.style.display = 'none';
+                }, 5000); // 5 วินาที
             }
         });
     </script>
-    }
 }
 else
 {
-    <p>You have to log in first in order to send an email.</p>
+    <div class="container my-4 text-center">
+        <p>You have to log in first in order to send an email.</p>
+    </div>
 }
