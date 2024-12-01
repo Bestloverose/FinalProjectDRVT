@@ -93,28 +93,23 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            // ให้ returnUrl เป็นหน้าเริ่มต้น (Index) ถ้าไม่มีการส่งมา
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
-                // ตรวจสอบ case-sensitive ของ UserName ด้วยการใช้ StringComparer.Ordinal
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
                 if (user != null && string.Equals(user.UserName, Input.UserName, StringComparison.Ordinal))
                 {
-                    // ถ้าผู้ใช้พบและชื่อผู้ใช้ตรงตามที่ป้อนใน Input.UserName
                     var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
+                        // แก้ไขเพื่อไปที่หน้า Index เลย
+                        return RedirectToPage("/Index");  // หรือ RedirectToPage("/") ถ้าหน้าเริ่มต้นเป็น Index
                     }
                     else
                     {
@@ -124,7 +119,6 @@ namespace FinalProject.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    // ถ้าผู้ใช้ไม่พบหรือชื่อผู้ใช้ไม่ตรง
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }

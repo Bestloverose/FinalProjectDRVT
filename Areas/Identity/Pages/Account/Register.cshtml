@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Register";
 }
+<head>
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+</head>
 
 <div class="card shadow-lg p-4 my-4 mx-auto text-black" style="max-width: 500px;">
     <h3 class="text-center">@ViewData["Title"]</h3>
@@ -46,6 +49,7 @@
         </div>
 
         <button id="registerSubmit" type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="button" class="btnb" onclick="window.location.href='/Identity/Account/Login'">back</button>
     </form>
 </div>
 

@@ -1,0 +1,11 @@
+﻿.center-message p {
+    font-size: 2rem; /* เพิ่มขนาดฟอนต์ */
+    font-weight: bold;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* จัดกลางแนวนอน */
+    align-items: center; /* จัดกลางแนวตั้ง */
+    height: 70vh; /* ใช้ความสูงเต็มหน้าจอ */
+    text-align: center;
+}

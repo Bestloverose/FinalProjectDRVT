@@ -11,6 +11,9 @@
     var successMessage = TempData["SuccessMessage"] as string; // ดึงข้อความจาก TempData
     var errorMessage = TempData["ErrorMessage"] as string;   // ดึงข้อความจาก TempData สำหรับข้อผิดพลาด
 }
+<head>
+    <link href="~/css/compose.css" rel="stylesheet" />
+</head>
 @if (SignInManager.IsSignedIn(User))
 {
     <h1 class="text-center my-4">Compose an Email</h1>
@@ -37,16 +40,16 @@
 
             <div class="mb-3">
                 <label for="receiver" class="form-label text-black">Receiver</label>
-                <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter Recipient's Username" />
+                <input name="Receiver" type="text" id="receiver" class="form-control" value="@receiver" placeholder="Enter Recipient's Email..." />
             </div>
 
             <div class="mb-3">
                 <label for="subject" class="form-label text-black">Subject</label>
-                <input name="Subject" type="text" id="subject" class="form-control" value="@subject" placeholder="Enter Username Subject" />
+                <input name="Subject" type="text" id="subject" class="form-control" value="@subject" placeholder="Enter Subject..." />
             </div>
 
             <div class="mb-3">
-                <label for="body" class="form-label text-black">Body</label>
+                <label for="body" class="form-label text-black"></label>
                 <textarea id="body" name="Body" class="form-control" rows="6" placeholder="Type your message here..."></textarea>
             </div>
 
@@ -80,7 +83,7 @@
 }
 else
 {
-    <div class="container my-4 text-center">
+    <div class="center-message my-4 text-center">
         <p>You have to log in first in order to send an email.</p>
     </div>
 }

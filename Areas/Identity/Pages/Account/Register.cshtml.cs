@@ -61,13 +61,11 @@ namespace FinalProject.Areas.Identity.Pages.Account
             [RegularExpression(@"^[a-zA-Zก-์]+$", ErrorMessage = "The First Name can contain only English letters and Thai letters.")]
             public string FirstName { get; set; }
 
+           
             [Required(ErrorMessage = "Last Name is required.")]
             [StringLength(255, ErrorMessage = "The Last Name must be between 1 and 255 characters.", MinimumLength = 1)]
             [RegularExpression(@"^[a-zA-Zก-์]+$", ErrorMessage = "The Last Name can contain only English letters and Thai letters.")]
             public string LastName { get; set; }
-
-
-
 
 
 
@@ -79,9 +77,10 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
 
             [Required]
-            [StringLength(255, ErrorMessage = "The Username must be between 1 to 255.", MinimumLength = 1)]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The Username must only contain English letters (no numbers or special characters).")]
+            [StringLength(255, ErrorMessage = "The Username must be between 1 to 255 characters.", MinimumLength = 1)]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Please enter a valid email address.")]
             public string UserName { get; set; }
+
 
 
             [Required]

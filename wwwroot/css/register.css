@@ -1,0 +1,112 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    padding-top: 50px; /* เพิ่มความสูงเต็มหน้าจอ */
+}
+
+.card {
+    background-color: #f8f9fa; /* Light background for the card */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 50px auto 20px auto; /* เพิ่ม margin-top เพื่อเพิ่มระยะห่างจากขอบบน */
+    max-width: 500px;
+    width: 100%;
+    height:auto; /* กำหนดความสูงแน่นอน */
+}
+
+
+    .card h3 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .card .form-floating {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+/* Form Inputs */
+.form-floating input {
+    border: 1px solid #ced4da; /* Border color */
+    border-radius: 5px;
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 16px;
+}
+
+    .form-floating input:focus {
+        border-color: #007bff; /* Focused border color */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus effect */
+    }
+
+.form-floating label {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    font-size: 16px;
+    color: #6c757d;
+    transition: 0.3s;
+}
+
+/* Floating Label Position */
+.form-floating input:not(:placeholder-shown) + label,
+.form-floating input:focus + label {
+    top: -10px;
+    font-size: 12px;
+    color: #007bff; /* Focused label color */
+}
+
+/* Error Message Styling */
+.text-danger {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff; /* Button background */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #0056b3; /* Hover color */
+    }
+
+    button:focus {
+        outline: none;
+    }
+
+/* Form Validation */
+input:invalid {
+    border-color: red !important;
+    background-color: #f8d7da !important;
+}
+
+input:valid {
+    border-color: green !important;
+}
+.btnb {
+    background-color: #007bff; /* Button background */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 50px;
+    margin-top: 20px; /* เพิ่ม margin-top เพื่อขยับปุ่มลง */
+    margin-left: auto; /* ช่วยให้ปุ่มชิดขวา */
+    margin-right: 0; /* ทำให้ปุ่มชิดขวาสุด */
+    display: block; /* ทำให้ปุ่มเป็น block element เพื่อให้ margin-left auto ทำงาน */
+}
+

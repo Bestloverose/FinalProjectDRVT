@@ -7,8 +7,12 @@
 <ul class="navbar-nav ms-auto">
     @if (SignInManager.IsSignedIn(User))
     {
+        // ดึงข้อมูล user ที่เข้าสู่ระบบ
+        var user = await UserManager.GetUserAsync(User);
+
         <li class="nav-item me-3">
-            <span class="nav-link text-dark">Hello! @User.Identity?.Name!</span>
+            <span class="nav-link text-dark">Hello! @user?.FirstName.ToUpper() @user?.LastName.ToUpper()</span>
+
         </li>
 
         <li class="nav-item">
@@ -22,4 +26,3 @@
 
     }
 </ul>
-

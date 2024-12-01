@@ -100,7 +100,7 @@ namespace FinalProject.Areas.EmailSystem.Pages
                 // เปรียบเทียบ Receiver กับชื่อผู้รับในฐานข้อมูลแบบ case-sensitive
                 if (!string.Equals(Receiver, receiverFromDatabase, StringComparison.Ordinal))
                 {
-                    ModelState.AddModelError(nameof(Receiver), "Your cannot send an email as another person.");
+                    ModelState.AddModelError(nameof(Receiver), "Username not found. Please check case sensitivity.");
                     return Page();
                 }
 
